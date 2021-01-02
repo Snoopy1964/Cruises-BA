@@ -1,13 +1,11 @@
-packrat/lib*/
-packrat/src/
 
 # data files (data privacy!)
 input*
-data*
 workspace.R
 tmp.R
-export2CSV.R
 plots
+data/*
+Results/*
 
 #-----------------------------------------------------------
 # File R.gitignore from https://github.com/github/gitignore
