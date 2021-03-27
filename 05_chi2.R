@@ -15,23 +15,27 @@
 # Problem:
 #   mittlere Anzahl Passagiere bleibt gleich, aber absolute 
 #   Anzahl Fälle ist für unterschiedliche Zeiträume
-# x.A09 <- ds.region                                        %>% 
-#   # dplyr::filter(Code.ID=="A09" & Region != "Nordamerika") %>%
-#   dplyr::filter(Code.ID=="A09")                           %>%
-#   group_by(Region)                                        %>%
-#   mutate(
-#     # Nr.avg.Crew  = PD.Crew/Nr.Days,
-#     # Nr.avg.Pax   = PD.Pax/Nr.Days,
-#     Nr.avg.Crew  = PD.Crew,
-#     Nr.avg.Pax   = PD.Pax,
-#     Nr.Cases     = Nr.Cases.Crew + Nr.Cases.Pax,
-#     Nr.not.Cases = (Nr.avg.Crew + Nr.avg.Pax)-Nr.Cases  ) %>%
-#   select(Region, Nr.Cases, Nr.not.Cases)
 
-# Chi^2 basierend auf Inzidenzdichte pro 1000 Personen und pro Jahr
-x.A09 <- ds.region                                        %>% 
-  # dplyr::filter(Code.ID=="A09" & Region != "Nordamerika") %>%
+# Chi^2 basierend auf Inzidenzen pro 1000 Personen und pro Jahr mit Nordamerika
+x.A09.NA <- ds.region                                        %>% 
   dplyr::filter(Code.ID=="A09")                           %>%
+  group_by(Region)                                        %>%
+  mutate(
+    Nr.Cases     = ID1000.year.Pers,
+    Nr.not.Cases = 1000 - Nr.Cases )                      %>%
+  select(Region, Nr.Cases, Nr.not.Cases)
+
+x.A09.cs2 <- as.data.frame((x.A09.NA[,2:3]))
+dimnames(x.A09.cs2) <- list(pull(x.A09[,1]), c("A09", "!A09"))
+cs2 <- chisq.test(x.A09.cs2[])
+print(cs2)
+x.A09.NA <- x.A09.NA %>% 
+  add_column(Residuen = cs2$residuals[,1]) %>% 
+  add_column(Chi2 = (cs2$residuals[,1])**2)
+
+# Chi^2 basierend auf Inzidenzen pro 1000 Personen und pro Jahr ohne Nordamerika
+x.A09 <- ds.region                                        %>% 
+  dplyr::filter(Code.ID=="A09" & Region != "Nordamerika") %>%
   group_by(Region)                                        %>%
   mutate(
     Nr.Cases     = ID1000.year.Pers,
@@ -71,6 +75,7 @@ x.A09.ship <- x.A09.ship %>%
 #--------------------------------------------------------------
 # (2) Berechne Odds-Ratios inkl. 95% confidence level 
 #     mit Hilfe von Exact Fisher Test
+#     ohne Nordamerika
 #--------------------------------------------------------------
 
 # Region

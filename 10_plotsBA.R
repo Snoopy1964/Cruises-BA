@@ -697,7 +697,39 @@ print(file.name.tmp)
 #----------------------------------------------
 # Kapitel 6.2.3 
 # ---------------------------------------------
-# Residuen des chi2 tests
+# Residuen des chi2 tests - inkl. Nordamerika
+x.A09.NA %>%
+  ggplot(aes(x = Region, y = Residuen)) + geom_bar(stat = "identity") + 
+  labs(
+    x = " ",
+    y = "Residuen") +
+  coord_flip()
+# ggplot(aes(x=Region, y=Chi2)) + geom_bar(stat="identity") + coord_flip()
+
+rtffile <- RTF(file = str_c(fileDir, "\\chi2-odds-ratio.doc"))
+
+# Tabelle mit Chi2
+addParagraph(rtffile, "\n\n\nErgebnis Chi2 Test\n")
+addTable(rtffile,
+         x.A09.NA %>%
+           select(c(
+             "Region",
+             "Nr.Cases",
+             "Nr.not.Cases",
+             "Residuen",
+             "Chi2"
+           )))
+
+file.name.tmp <-
+  str_c(fileDir, "Abb.6-8 residuals chi2 A09 per region.png (inkl. Nordamerika).jpeg")
+ggsave(file.name.tmp,
+       device  = "png",
+       width  = 210,
+       height = 100,
+       units  = "mm")
+print(file.name.tmp)
+
+# Residuen des chi2 tests - ohne Nordamerika
 x.A09 %>%
   ggplot(aes(x = Region, y = Residuen)) + geom_bar(stat = "identity") + 
   labs(
@@ -721,7 +753,7 @@ addTable(rtffile,
            )))
 
 file.name.tmp <-
-  str_c(fileDir, "Abb.6-8 residuals chi2 A09 per region.png")
+  str_c(fileDir, "Abb.6-9 residuals chi2 A09 per region.png (ohne Nordamerika).jpeg")
 ggsave(file.name.tmp,
        device  = "png",
        width  = 210,
@@ -753,7 +785,7 @@ x.A09 %>%
   coord_flip()
 
 file.name.tmp <-
-  str_c(fileDir, "Abb.6-9 odds-ratio A09 per region.png")
+  str_c(fileDir, "Abb.6-10 odds-ratio A09 per region.png")
 ggsave(file.name.tmp,
        device = "png",
        width = 210,
