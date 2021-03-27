@@ -16,7 +16,7 @@
 #
 # - Fall (cases):
 #   Ein Fall beschreibt das Auftreten einer nach ICD-10 GM kategorisierten Krankheit.
-#   Dieser wird von einem Arzt im Bordhospital angelegt, sobald ein Patient sich 
+#   Dieser wird von einem Arzt im Bordhospital angelegt, sobald ein Patient 
 #   im Hospital untersucht wurde (Erst-Diagnose). 
 #   Eine weitere Konsultation aufgrund des gleichen ICD-10 Codes innerhalb einer Reise
 #   wird der Erstdiagnose zugeordnet und führt nicht zu einem weiteren Fall.

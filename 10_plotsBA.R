@@ -278,10 +278,19 @@ gg <- personNr.ship.day %>%
   ggplot()
 
 gg +
-  geom_smooth(aes(x = Datum, y = PaxNr)) +
+  theme(
+    legend.position = c(0.98, 0.98),
+    legend.title = element_blank(),
+    legend.justification = c("right", "top"),
+    text = element_text(size = 16)
+  ) +
+  # geom_smooth(aes(x = Datum, y = PaxNr)) +
   geom_line(aes(x = Datum, y = PaxNr), color = "black")   +
   geom_line(aes(x = Datum, y = CrewNr), color = "red") +
-  ylim(0, 16000)
+  ylim(0, 16000) +
+  labs(x    = "Datum",
+       y    = "Anzahl Passagiere/Crew")
+  
 
 file.name.tmp <- str_c(fileDir, "Abb.6-1 PersonNr.day.png")
 ggsave(
@@ -323,16 +332,18 @@ gg <-
 gg  +
   theme(
     legend.position = c(0.98, 0.98),
-    legend.justification = c("right", "top")
+    legend.title = element_blank(),
+    legend.justification = c("right", "top"),
+    text = element_text(size = 16)
   ) +
   labs(x    = "Alter in Jahren",
        y    = "Anzahl",
        fill = " ") +
   geom_histogram(aes(x = Alter, fill = PaxStatus), bins = 99) +
-  ggtitle("Altersverteilung des untersuchten Samples (Histogramm)")
+  ggtitle("Altersverteilung (Histogramm)")
 
 
-file.name.tmp <- str_c(fileDir, "Abb.6-2 Age.infect.histogram.png")
+file.name.tmp <- str_c(fileDir, "Abb.6-3 Age.infect.histogram.png")
 ggsave(
   file.name.tmp,
   device = "png",
@@ -345,19 +356,20 @@ print(file.name.tmp)
 # Altersverteilung der untersuchten Infektions-Fälle (Boxplot pro ICD10-Code)
 gg +
   theme(
-    legend.position = c(0.94, 0.98),
+    legend.position = c(0.92, 0.98),
     legend.title = element_blank(),
-    legend.justification = c("center", "top")
+    legend.justification = c("center", "top"),
+    text = element_text(size = 16)
   ) +
   labs(x    = "ICD-10 GM Code",
        y    = "Alter",
        fill = "NONE")+
   geom_boxplot(aes(x = Code.ID, y = Alter, fill = PaxStatus))  +
   # coord_flip()+
-  ggtitle("Altersverteilung der untersuchten Infektions-Fälle pro ICD10-Code")
+  ggtitle("Altersverteilung pro ICD10-Code (Boxplot)")
 
 file.name.tmp <-
-  str_c(fileDir, "Abb.6-3 Age.infect.ICD10.boxplot.png")
+  str_c(fileDir, "Abb.6-4 Age.infect.ICD10.boxplot.png")
 ggsave(
   file.name.tmp,
   device = "png",
@@ -399,11 +411,17 @@ gg <- ggplot(ds.A09.tmp, aes(x = Week))
 gg +
   # geom_step(aes(y=Nr.Cases), alpha = 1/2) +
   geom_bar(aes(y = ID1000.week.Pers), stat = "identity", alpha = 3 / 4) +
-  geom_smooth(aes(x = Week, y = ID1000.week.Pers),
-              span = 6 / 12,
-              fullrange = FALSE) +
+  # geom_smooth(aes(x = Week, y = ID1000.week.Pers),
+  #             span = 6 / 12,
+  #             fullrange = FALSE) +
+  theme(
+    legend.position = c(0.92, 0.98),
+    legend.title = element_blank(),
+    legend.justification = c("center", "top"),
+    text = element_text(size = 12)
+  ) +
   facet_wrap(~ Schiff, scales = NULL) +
-  ggtitle("Neuerkrankungen pro 1000 Personen pro Woche für Gastroenteritis (A09) je Schiff") +
+  ggtitle("7-Tage Inzidenz pro 1000 Personen für Gastroenteritis (A09) je Schiff") +
   xlab("Woche ab 1.1.2015 bis 31.12.2017") +
   ylab("Neuerkrankungen pro 1000 Personen pro Woche") +
   geom_hline(yintercept = 10, color = "yellow", alpha = 2/4)       +
@@ -452,8 +470,14 @@ gg +
   geom_bar(aes(y = ID1000.week.Pers), stat = "identity", alpha = 3 / 4) +
   # macht hier keinen Sinn, da es sehr viele Lücken zwischen den Zeiträumen gibt
   # geom_smooth(aes(x=Week, y=CI1000), span = 6/12, fullrange = FALSE) +
+  theme(
+    legend.position = c(0.92, 0.98),
+    legend.title = element_blank(),
+    legend.justification = c("center", "top"),
+    text = element_text(size = 12)
+  ) +
   facet_wrap(~ Region, scales = NULL) +
-  ggtitle("Neuerkrankungen pro 1000 Personen pro Woche für Gastroenteritis (A09) je Region") +
+  ggtitle("7-Tage Inzidenz pro 1000 Personen für Gastroenteritis (A09) je Region") +
   xlab("Woche ab 1.1.2015 bis 31.12.2017") +
   ylab("Neuerkrankungen pro 1000 Personen pro Woche")
 
@@ -499,14 +523,14 @@ gg <- ggplot(ds.A09.tmp, aes(y = Region, x = Schiff))
 gg +
   # geom_step(aes(y=Nr.Cases), alpha = 1/2) +
   geom_jitter(aes(size = ID.Pers*7*1000), alpha = 2 / 4, color = "blue") +
-  ggtitle("Inzidenzdichte für 1000 Personen pro Personenwoche für Gastroenteritis (A09)") +
+  ggtitle("7-Tage Inzidenz pro 1000 Personen für Gastroenteritis (A09)") +
   theme(
     # legend.position = c(0.98, 0.98),
     legend.justification = c("right", "top")
   ) +
   labs(x    = " ",
        y    = " ",
-       size = "Inzidenzdichte:\nAnzahl Fälle\npro 1000 Personen\npro Personenwoche")
+       size = "7-Tage Inzidenz:\nAnzahl Fälle\npro 1000 Personen\npro Woche")
 
 file.name.tmp <-
   str_c(fileDir, "Abb.7-1a epi_curve.A09.ships.regions.ID.Pers1000.week.png")
@@ -530,7 +554,7 @@ gg +
   ) +
   labs(x    = " ",
        y    = " ",
-       size = "Inzidenzdichte:\nAnzahl Fälle\npro 1000 Personen\npro Personenjahr")
+       size = "Inzidenz:\nAnzahl Fälle\npro 1000 Personen\npro Jahr")
 
 
 file.name.tmp <-
@@ -548,7 +572,9 @@ print(file.name.tmp)
 
 
 #----------------------------------------------------------------------------------------------
-# Disease Map für Regionen
+# Kapitel 6.2.2 -> Disease Map für Regionen
+
+#----------------------------------------------------------------------------------------------
 # join CI auf Regionen Tabelle für CI Zahlen als Text (bezogen auf den Mittelpunkt der Region)
 #----------------------------------------------------------------------------------------------
 # relative Häufigkeit pro Infektions Code und pro Region im gesamten Zeitraum
@@ -578,11 +604,12 @@ ggmap(map.Welt) +
   scale_fill_distiller(palette = "Reds", direction = 1, limits = c(0,220)) +
   theme(
     legend.position = c(0.98, 0.98),
-    legend.justification = c("right", "top")
+    legend.justification = c("right", "top"),
+    text = element_text(size = 13)
   ) +
   labs(x    = "Geographische Länge (longitude)",
        y    = "Geographische Breite  (latitude)",
-       fill = "Inzidenzdichte:\nAnzahl Fälle\npro 1000 Personen\npro Personenjahr") +
+       fill = "Inzidenz:\nAnzahl Fälle\npro 1000 Pers.\npro Jahr") +
   geom_text(
     data = Regions,
     mapping = aes(x = lng,
@@ -606,7 +633,7 @@ ggmap(map.Welt) +
   )
 
 file.name.tmp <-
-  str_c(fileDir, "Abb.6-8-a diseaseMap.A09.region.pax.jpeg")
+  str_c(fileDir, "Abb.6-7-a diseaseMap.A09.region.pax.jpeg")
 ggsave(
   file.name.tmp,
   device = "jpeg",
@@ -628,11 +655,12 @@ ggmap(map.Welt) +
   scale_fill_distiller(palette = "Reds", direction = 1, limits = c(0,220)) +
   theme(
     legend.position = c(0.98, 0.98),
-    legend.justification = c("right", "top")
+    legend.justification = c("right", "top"),
+    text = element_text(size = 13)
   ) +
   labs(x    = "Geographische Länge (longitude)",
        y    = "Geographische Breite  (latitude)",
-       fill = "Inzidenzdichte:\nAnzahl Fälle\npro 1000 Personen\npro Personenjahr") +
+       fill = "Inzidenz:\nAnzahl Fälle\npro 1000 Pers.\npro Jahr") +
   geom_text(
     data = Regions,
     mapping = aes(x = lng,
@@ -656,7 +684,7 @@ ggmap(map.Welt) +
   )
 
 file.name.tmp <-
-  str_c(fileDir, "Abb.6-8-b diseaseMap.A09.region.crew.jpeg")
+  str_c(fileDir, "Abb.6-7-b diseaseMap.A09.region.crew.jpeg")
 ggsave(
   file.name.tmp,
   device = "jpeg",
@@ -666,6 +694,9 @@ ggsave(
 )
 print(file.name.tmp)
 
+#----------------------------------------------
+# Kapitel 6.2.3 
+# ---------------------------------------------
 # Residuen des chi2 tests
 x.A09 %>%
   ggplot(aes(x = Region, y = Residuen)) + geom_bar(stat = "identity") + 
@@ -690,7 +721,7 @@ addTable(rtffile,
            )))
 
 file.name.tmp <-
-  str_c(fileDir, "Abb.6-9 residuals chi2 A09 per region.png")
+  str_c(fileDir, "Abb.6-8 residuals chi2 A09 per region.png")
 ggsave(file.name.tmp,
        device  = "png",
        width  = 210,
@@ -722,7 +753,7 @@ x.A09 %>%
   coord_flip()
 
 file.name.tmp <-
-  str_c(fileDir, "Abb.6-10 odds-ratio A09 per region.png")
+  str_c(fileDir, "Abb.6-9 odds-ratio A09 per region.png")
 ggsave(file.name.tmp,
        device = "png",
        width = 210,
@@ -764,7 +795,7 @@ ggmap(map.Welt) +
   ) +
   labs(x    = "Geographische Länge (longitude)",
        y    = "Geographische Breite  (latitude)",
-       fill = "Inzidenzdichte:\nAnzahl Fälle\npro 1000 Personen\npro Personenjahr") +
+       fill = "Inzidenz:\nAnzahl Fälle\npro 1000 Personen\npro Jahr") +
   geom_text(
     data = Regions,
     mapping = aes(x = lng,
