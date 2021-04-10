@@ -1,18 +1,18 @@
 #-------------------------------------------------------------------------
-# Analyze the ship log book concerning regions, ports, etc.
+# Analyse des ship logs bzgl. Regionen, Häfen, etc.
 #
-# (1) writing output of tables into Word File using package rtf
-# (2) plots Region map incl. Ports
+# (1) Ergebisse als Word Tabellen mit R-Package rtf
+# (2) plots Region map inkl. Häfen
 #
 #
 #-------------------------------------------------------------------------
 fileDir <-
-  "C:\\Users\\user\\OneDrive\\Bachelorarbeit\\Results\\doNotChange"
+  "./Results/WordDocs-doNotChange/"
 
 #----------------------------------------------------------------
 # (1) writing output of tables into Word File using package rtf
 #----------------------------------------------------------------
-rtffile <- RTF(file = str_c(fileDir, "\\Statistik_Schiffslog.doc"))
+rtffile <- RTF(file = str_c(fileDir, "Statistik_Schiffslog.doc"))
 # Schiffsdaten
 addParagraph(rtffile, "Schiffsdaten\n")
 addTable(rtffile, ships)
@@ -25,7 +25,7 @@ addTable(rtffile,
            group_by(Schiff) %>%
            summarize(min.date = min(Datum)))
 
-# Erstes Datum wann ein Schiff in einer Region war
+# Erstes Datum, wann ein Schiff in einer Region war
 addParagraph(rtffile, "\n\n\nErstes Datum wann ein Schiff in einer Region war\n")
 addTable(
   rtffile,

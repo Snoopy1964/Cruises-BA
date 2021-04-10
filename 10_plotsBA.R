@@ -5,7 +5,7 @@
 #--------------------------------------------------------------------------------------
 
 fileDir <-
-  "C:/Users/user/OneDrive/Bachelorarbeit/Diagramme/"
+  "C:./Results/Diagramme/"
 
 
 #----------------------------------------------------------------------
@@ -24,8 +24,8 @@ theme_update(plot.subtitle = element_text(hjust = 0.5))
 
 #--------------------------------------------------
 # Kapitel 2
-# (1) plot Region map incl. Ports
-# (2) plot Personenanzahl pro Tag der Gesamtflotte
+# (Abb. 2-1) plot Region map incl. Ports
+# (Abb. 2-2) plot Personenanzahl pro Tag der Gesamtflotte
 #-------------------------------------------------
 
 
@@ -95,16 +95,6 @@ df <-
   )
 
 p1 <- ggplot(df) +
-  # geom_segment(aes(
-  #   x = start,
-  #   xend = end,
-  #   y = P.Nr,
-  #   yend = P.Nr,
-  #   size = 1
-  # ), color = "blue", alpha=1/2) +
-  # Do that in Word and group
-  # geom_rect(aes(xmin=0.98, xmax=2.02, ymin=0.6, ymax=4.5), color = "red", fill = NA, size=1, alpha = 6/6) +
-  # geom_rect(aes(xmin=0, xmax=7, ymin=2.8, ymax=3.2), color = "blue", fill =NA, size=1, alpha = 6/6) +
   geom_vline(xintercept = 0:7,
              linetype = "dashed",
              color = "dark gray") +
@@ -145,15 +135,12 @@ p1 <- ggplot(df) +
     label = TeX("$\\Delta t_4$"),
     size = 5
   ) +
-  # ylab("Person (blau) / Personentage (rot)") +
-  # xlim(0,8) +
-  # geom_text(data=tibble(x=c(0.5), y=(3.5), tex="$\\sum^{day 1}$"), aes(x=x, y=y, label=TeX(tex))) +
   theme(legend.position = "none",
         axis.title.x = element_text(vjust = -0.5, hjust = 0.6)) # +
 # theme(legend.position = "none", plot.margin = margin(1, 1, 2, 2, "cm")) # +
 # geom_bar(data=tibble(x=0.5:6.5, y=c(1,3,4,3,2,2,1)), aes(x=x, y=y), fill="red", stat = "identity", alpha=1/5)
 
-p1
+
 file.name.tmp <- str_c(fileDir, "Abb.5-2 PersonIntervals.old.png")
 ggsave(
   file.name.tmp,
@@ -170,12 +157,9 @@ p2 <- ggplot(df) +
              linetype = "dashed",
              color = "dark gray") +
   ylab("Summe über Tage/Person") +
-  # ylab(TeX("\\sum(Tage/Person)")) +
   xlab("") +
   xlim(0.7, 4.3) +
   coord_flip() +
-  # xlim(0,8) +
-  # geom_text(data=tibble(x=c(0.5), y=(3.5), tex="$\\sum^{day 1}$"), aes(x=x, y=y, label=TeX(tex))) +
   theme(legend.position = "none",
         axis.title.x = element_text(vjust = -0.5)) +
   geom_bar(
@@ -194,9 +178,6 @@ p3 <- ggplot(df) +
   xlab("Tag in Woche") +
   scale_y_reverse() +
   ylab("Summe über Personen/Tag") +
-  # ylab(TeX("\\sum(Personen/Tag)")) +
-  # xlim(0,8) +
-  # geom_text(data=tibble(x=c(0.5), y=(3.5), tex="$\\sum^{day 1}$"), aes(x=x, y=y, label=TeX(tex))) +
   scale_x_continuous(position = "top") +
   theme(legend.position = "none", axis.title.x = element_blank()) +
   geom_bar(
@@ -207,11 +188,6 @@ p3 <- ggplot(df) +
     stat = "identity",
     alpha = 1 / 2
   )
-
-# p4 <- ggplot() +
-#   geom_blank() +
-#   annotate(geom = "text", x=0, y=0, label = TeX("$\\sum Anzahl Personen/Tag$")) +
-#   theme(axis.title = element_blank(), axis() = element_blank())
 
 file.name.tmp <- str_c(fileDir, "Abb.5-2 PersonIntervals.png")
 ggarrange(
@@ -255,20 +231,6 @@ print(file.name.tmp)
 #----------------------------------
 # Kapitel 6
 #----------------------------------
-
-
-# plot Personenanzahl pro Tag der Gesamtflotte
-# # Durchschnittliche Personenanzahl der Flotte
-# personNr.ship.day %>% summarize(paxNrAvg = sum(PaxNr) / nrDays(Day))
-# 
-# # Durchschnittliche Personenanzahl der Flotte pro Jahr
-# personNr.ship.day %>% group_by(Year) %>% summarize(paxNrAvg = sum(PaxNr) / nrDays(Day))
-# 
-# # Durchschnittliche Personenanzahl der Schiffe
-# personNr.ship.day %>% group_by(Schiff) %>% summarize(paxNrAvg = sum(PaxNr) / nrDays(Day))
-# 
-# # Durchschnittliche Personenzahl der Schiffe pro Jahr
-# personNr.ship.day %>% group_by(Schiff, Year) %>% summarize(paxNrAvg = sum(PaxNr) / nrDays(Day))
 
 # Passagier-, Crew- und Personenanzahl pro Tag (Personen Tage), aus shiplog.day
 gg <- personNr.ship.day %>%
@@ -389,20 +351,24 @@ print(file.name.tmp)
 # Summe aller cases in einer Woche pro Schiff, aggregiert über Regionen
 #----------------------------------------------------------------------
 ds.A09.tmp <- ds                                    %>%
-  dplyr::filter(Code.ID == "A09")  %>%
+  dplyr::filter(Code.ID == "A09")                   %>%
   group_by(Week, Schiff)                            %>%
   summarize(
+    Nr.Days          = nrDays(Day),
+    # Summe der Cases
     Nr.Cases.Crew    = sum(Crew),
     Nr.Cases.Pax     = sum(Pax),
     Nr.Cases         = Nr.Cases.Crew + Nr.Cases.Pax,
-    Nr.Days          = nrDays(Day),
+    # Personentage
     PD.Pax           = sum(PaxNr),
     PD.Crew          = sum(CrewNr),
     PD.Pers          = PD.Pax + PD.Crew,
+    # Inzidenzdichte
     ID.Pax           = Nr.Cases.Pax / PD.Pax ,
     ID.Crew          = Nr.Cases.Crew / PD.Crew ,
     ID.Pers          = Nr.Cases / (PD.Pax + PD.Crew) ,
-    ID1000.week.Pers = ID.Pers * 1000 * 7
+    # Inzidenz aus Inzidenzdichte * Anzahl Personen * Anzahl Tage Bezugszeitraum
+    I1000.week.Pers  = ID.Pers * 1000 * 7 
   )
 
 gg <- ggplot(ds.A09.tmp, aes(x = Week))
@@ -410,10 +376,7 @@ gg <- ggplot(ds.A09.tmp, aes(x = Week))
 # Plotte Neuerkrankungen pro 1000 Personen pro Woche 
 gg +
   # geom_step(aes(y=Nr.Cases), alpha = 1/2) +
-  geom_bar(aes(y = ID1000.week.Pers), stat = "identity", alpha = 3 / 4) +
-  # geom_smooth(aes(x = Week, y = ID1000.week.Pers),
-  #             span = 6 / 12,
-  #             fullrange = FALSE) +
+  geom_bar(aes(y = I1000.week.Pers), stat = "identity", alpha = 3 / 4) +
   theme(
     legend.position = c(0.92, 0.98),
     legend.title = element_blank(),
@@ -432,7 +395,7 @@ gg +
   geom_text(aes(150,21, label="OPP 3"), size = 3, color = "darkgrey")
   
 file.name.tmp <-
-  str_c(fileDir, "Abb.6-5 epi_curve.A09.ships.ID1000.week.png")
+  str_c(fileDir, "Abb.6-5 epi_curve.A09.ships.I1000.week.png")
 ggsave(
   file.name.tmp,
   device = "png",
@@ -451,23 +414,27 @@ ds.A09.tmp <- ds                                    %>%
   dplyr::filter(Code.ID == "A09")  %>%
   group_by(Week, Region)                            %>%
   summarize(
+    Nr.Days          = nrDays(Day),
+    # Summe der Cases
     Nr.Cases.Crew    = sum(Crew),
     Nr.Cases.Pax     = sum(Pax),
     Nr.Cases         = Nr.Cases.Crew + Nr.Cases.Pax,
-    Nr.Days          = nrDays(Day),
+    # Personentage
     PD.Pax           = sum(PaxNr),
     PD.Crew          = sum(CrewNr),
     PD.Pers          = PD.Pax + PD.Crew,
+    # Inzidenzdichte
     ID.Pax           = Nr.Cases.Pax / PD.Pax ,
     ID.Crew          = Nr.Cases.Crew / PD.Crew ,
     ID.Pers          = Nr.Cases / (PD.Pax + PD.Crew) ,
-    ID1000.week.Pers = ID.Pers * 1000 * 7
+    # Inzidenz aus Inzidenzdichte * Anzahl Personen * Anzahl Tage Bezugszeitraum
+    I1000.week.Pers  = ID.Pers * 1000 * 7
   )
 
 gg <- ggplot(ds.A09.tmp, aes(x = Week))
 
 gg +
-  geom_bar(aes(y = ID1000.week.Pers), stat = "identity", alpha = 3 / 4) +
+  geom_bar(aes(y = I1000.week.Pers), stat = "identity", alpha = 3 / 4) +
   # macht hier keinen Sinn, da es sehr viele Lücken zwischen den Zeiträumen gibt
   # geom_smooth(aes(x=Week, y=CI1000), span = 6/12, fullrange = FALSE) +
   theme(
@@ -482,7 +449,7 @@ gg +
   ylab("Neuerkrankungen pro 1000 Personen pro Woche")
 
 file.name.tmp <-
-  str_c(fileDir, "Abb.6-6 epi_curve.A09.regions.ID1000.week.png")
+  str_c(fileDir, "Abb.6-6 epi_curve.A09.regions.I1000.week.png")
 ggsave(
   file.name.tmp,
   device = "png",
@@ -501,27 +468,24 @@ ds.A09.tmp <- ds                                    %>%
   dplyr::filter(Code.ID == "A09")  %>%
   group_by(Week, Region, Schiff)                            %>%
   summarize(
+    Nr.Days       = nrDays(Day),
+    #  Summe der Cases
     Nr.Cases.Crew = sum(Crew),
     Nr.Cases.Pax  = sum(Pax),
     Nr.Cases      = Nr.Cases.Crew + Nr.Cases.Pax,
-    Nr.Days       = nrDays(Day),
+    # Personentage
     PD.Pax        = sum(PaxNr),
     PD.Crew       = sum(CrewNr),
     PD.Pers       = PD.Pax + PD.Crew,
+    # Inzidenzdichte
     ID.Pax        = Nr.Cases.Pax / PD.Pax ,
     ID.Crew       = Nr.Cases.Crew / PD.Crew ,
-    ID.Pers       = Nr.Cases / (PD.Pax + PD.Crew) ,
-    ID1000.year.Pers = ID.Pers * 1000 * 365,
-    CI1000.Pax    = CI1000(ID.Pax, Nr.Days),
-    # CI1000.Pax_n  = Nr.Cases.Pax/(PD.Pax/Nr.Days) * 1000, # zum Vergleichen später in Kapitel Diskussion???
-    CI1000.Crew   = CI1000(ID.Crew, Nr.Days),
-    CI1000        = CI1000(ID.Pers, Nr.Days)
+    ID.Pers       = Nr.Cases / (PD.Pax + PD.Crew)
   )
 
 gg <- ggplot(ds.A09.tmp, aes(y = Region, x = Schiff))
 
 gg +
-  # geom_step(aes(y=Nr.Cases), alpha = 1/2) +
   geom_jitter(aes(size = ID.Pers*7*1000), alpha = 2 / 4, color = "blue") +
   ggtitle("7-Tage Inzidenz pro 1000 Personen für Gastroenteritis (A09)") +
   theme(
@@ -533,7 +497,7 @@ gg +
        size = "7-Tage Inzidenz:\nAnzahl Fälle\npro 1000 Personen\npro Woche")
 
 file.name.tmp <-
-  str_c(fileDir, "Abb.7-1a epi_curve.A09.ships.regions.ID.Pers1000.week.png")
+  str_c(fileDir, "Abb.7-1a epi_curve.A09.ships.regions.I.Pers1000.week.png")
 ggsave(
   file.name.tmp,
   device = "png",
@@ -544,8 +508,11 @@ ggsave(
 print(file.name.tmp)
 
 # Plotte Neuerkrankungen pro 1000 Personen pro Personen Jahr pro Schiff und pro Region
-df <- ds.ship.region %>% dplyr::filter(Code.ID == "A09" & Nr.Days>=28) %>% select(Schiff, Region, ID1000.year.Pers)
-gg <- ggplot(data=df, aes(x=Schiff, y=Region, size=ID1000.year.Pers))
+df <- ds.ship.region                                %>% 
+      dplyr::filter(Code.ID == "A09" & Nr.Days>=28) %>% 
+      select(Schiff, Region, I1000.year.Pers)
+
+gg <- ggplot(data=df, aes(x=Schiff, y=Region, size=I1000.year.Pers))
 gg + 
   geom_point(alpha=1/2, color = "blue") + scale_size_continuous(range=c(1,24)) +
   theme(
@@ -578,16 +545,15 @@ print(file.name.tmp)
 # join CI auf Regionen Tabelle für CI Zahlen als Text (bezogen auf den Mittelpunkt der Region)
 #----------------------------------------------------------------------------------------------
 # relative Häufigkeit pro Infektions Code und pro Region im gesamten Zeitraum
-# join CI auf Regionen Tabelle für CI Werte am Mittelpunkt der Region
+# join Inzidenz auf Regionen Tabelle für Inzidenzwerte Werte am Mittelpunkt der Region
 ds.region.tmp <- ds.region %>%
   # select(Region, Code.ID, CI1000.Crew, CI1000.Pax, CI1000, Nr.Days) %>%
-  select(Region, Code.ID, ID1000.year.Crew, ID1000.year.Pax, ID1000.year.Pers) %>%
+  select(Region, Code.ID, I1000.year.Crew, I1000.year.Pax, I1000.year.Pers) %>%
   left_join(Regions, by = "Region")
 
-# join CI auf Regionen.Polygons Tabelle für Füllfarbe der Regionen nach CI
+# join Inzidenz auf Regionen.Polygons Tabelle für Füllfarbe der Regionen nach Inzidenz
 ds.polygon <- ds.region %>%
-  # select(Region, Code.ID, CI1000.Crew, CI1000.Pax, CI1000, Nr.Days) %>%
-  select(Region, Code.ID, ID1000.year.Crew, ID1000.year.Pax, ID1000.year.Pers) %>%
+  select(Region, Code.ID, I1000.year.Crew, I1000.year.Pax, I1000.year.Pers) %>%
   left_join(Regions.Polygon, by = c("Region" = "region"))
 #-----------------------
 # A09 - Gastroenteritis
@@ -598,7 +564,7 @@ ggmap(map.Welt) +
   ggtitle("Disease Map - Gastroenteritis (A09) im Zeitraum 2015 - 2017 Passagiere") +
   geom_polygon(
     data = ds.polygon %>% dplyr::filter(Code.ID == "A09"),
-    aes(long, lat, group = group, fill = ID1000.year.Pax),
+    aes(long, lat, group = group, fill = I1000.year.Pax),
     alpha = 0.7
   ) +
   scale_fill_distiller(palette = "Reds", direction = 1, limits = c(0,220)) +
@@ -625,7 +591,7 @@ ggmap(map.Welt) +
     mapping = aes(
       x = lng,
       y = lat,
-      label = sprintf("%.1f", ID1000.year.Pax)
+      label = sprintf("%.1f", I1000.year.Pax)
     ),
     nudge_x = 0,
     nudge_y = 2,
@@ -648,8 +614,7 @@ ggmap(map.Welt) +
   ggtitle("Disease Map - Gastroenteritis (A09) im Zeitraum 2015 - 2017 Crew") +
   geom_polygon(
     data = ds.polygon %>% dplyr::filter(Code.ID == "A09"),
-    aes(long, lat, group = group, fill = ID1000.year.Crew),
-    # aes(long, lat, group = group, fill = CI1000.Crew),
+    aes(long, lat, group = group, fill = I1000.year.Crew),
     alpha = 0.7
   ) +
   scale_fill_distiller(palette = "Reds", direction = 1, limits = c(0,220)) +
@@ -676,7 +641,7 @@ ggmap(map.Welt) +
     mapping = aes(
       x = lng,
       y = lat,
-      label = sprintf("%.1f", ID1000.year.Crew)
+      label = sprintf("%.1f", I1000.year.Crew)
     ),
     nudge_x = 0,
     nudge_y = 2,
@@ -815,7 +780,7 @@ ggmap(map.Welt) +
   ggtitle("Disease Map - Infektionskrankheiten II im Zeitraum 2015-2017") +
   geom_polygon(
     data = ds.polygon %>% dplyr::filter(Code.ID %in% c("A16", "B01", "B02", "J11")),
-    aes(long, lat, group = group, fill = ID1000.year.Pers),
+    aes(long, lat, group = group, fill = I1000.year.Pers),
     alpha = 0.7
   ) +
   facet_wrap( ~ Code.ID) +
@@ -843,7 +808,7 @@ ggmap(map.Welt) +
     mapping = aes(
       x = lng,
       y = lat,
-      label = sprintf("%.2f", ID1000.year.Pers)
+      label = sprintf("%.2f", I1000.year.Pers)
     ),
     nudge_x = 0,
     nudge_y = 1,

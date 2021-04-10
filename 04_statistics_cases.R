@@ -7,12 +7,12 @@
 #
 
 fileDir <-
-  "C:\\Users\\user\\OneDrive\\Bachelorarbeit\\Results\\doNotChange"
+  "./Results/WordDocs-doNotChange/"
 
 #----------------------------------------------------------------
 # (1) writing output of tables into Word File using package rtf
 #----------------------------------------------------------------
-rtffile <- RTF(file = str_c(fileDir, "\\Statistik_cases.doc"))
+rtffile <- RTF(file = str_c(fileDir, "Statistik_cases.doc"))
 
 # Aggregation der Erstdiagnosen auf Tagesbasis (erste 10 Eintrtäge)
 addParagraph(rtffile, "\n\n\nDie ersten 10 auf Tagesbasis aggregierten Erstdiagnosen von Varizellen")

@@ -21,7 +21,7 @@ x.A09.NA <- ds.region                                        %>%
   dplyr::filter(Code.ID=="A09")                           %>%
   group_by(Region)                                        %>%
   mutate(
-    Nr.Cases     = ID1000.year.Pers,
+    Nr.Cases     = I1000.year.Pers,
     Nr.not.Cases = 1000 - Nr.Cases )                      %>%
   select(Region, Nr.Cases, Nr.not.Cases)
 
@@ -38,7 +38,7 @@ x.A09 <- ds.region                                        %>%
   dplyr::filter(Code.ID=="A09" & Region != "Nordamerika") %>%
   group_by(Region)                                        %>%
   mutate(
-    Nr.Cases     = ID1000.year.Pers,
+    Nr.Cases     = I1000.year.Pers,
     Nr.not.Cases = 1000 - Nr.Cases )                      %>%
   select(Region, Nr.Cases, Nr.not.Cases)
 
@@ -60,7 +60,7 @@ x.A09.ship <- ds.ship                                     %>%
     # Nr.avg.Pax   = PD.Pax,
     # Nr.Cases     = Nr.Cases.Crew + Nr.Cases.Pax,
     # Nr.not.Cases = (Nr.avg.Crew + Nr.avg.Pax)-Nr.Cases  ) %>%
-    Nr.Cases     = ID1000.year.Pers,
+    Nr.Cases     = I1000.year.Pers,
     Nr.not.Cases = 1000 - Nr.Cases )                      %>%
   select(Schiff, Nr.Cases, Nr.not.Cases)
 

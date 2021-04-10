@@ -5,10 +5,10 @@
 # - Schiffslogbuch (shiplog)
 #     Das Schiffslogbuch gibt an, wo sich welches Schiff an welchem Tag befunden hat.
 #     Der Ort des Schiffes entspricht den Geo-Koordinaten des Hafens.
-#     An Seetagen wird hier die Geo-Koordinate des letzte Hafen benutzt.
+#     An Seetagen wird hier die Geo-Koordinate des letzten Hafens benutzt.
 #
 # - Region:
-#     frei definiertes Polygon, welches den Fahrgebieten der Schiffe entspricht.
+#     frei definiertes Polygon, welches den Fahrgebieten der Schiffe aus dem TUIC Katalog entspricht.
 #     Die Region ist somit eine Gruppierung von angefahrenen Häfen. An den Häfen ist 
 #     die Geo-Koordinaten festgelegt. Alle Häfen werden einer Region zugeordnet. Dieser 
 #     wiederum wird ein zentraler Punkt (geschätzt) als Mittelpunkt des Polygons 
