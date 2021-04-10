@@ -264,30 +264,6 @@ ggsave(
 )
 print(file.name.tmp)
 
-# Passagier-, Crew- und Personenanzahl pro Tag pro Schiff (Personen Tage), aus shiplog.day
-gg <- personNr.ship.day %>%
-  group_by(Day, Datum, Schiff)  %>%
-  summarize(PaxNr = sum(PaxNr) / nrDays(Day),
-            CrewNr = sum(CrewNr) / nrDays(Day)) %>%
-  ggplot()
-
-gg +
-  # geom_smooth(aes(x = Datum, y = PaxNr)) +
-  geom_line(aes(x = Datum, y = PaxNr), color = "black")   +
-  # geom_line(aes(x = Datum, y = CrewNr), color = "red") +
-  facet_wrap( ~ Schiff) +
-  ylim(0, 3000)
-
-file.name.tmp <- str_c(fileDir, "Abb.6-1-a PersonNr.day.ship.png")
-ggsave(
-  file.name.tmp,
-  device = "png",
-  width  = 210,
-  height = 160,
-  units  = "mm"
-)
-print(file.name.tmp)
-
 # Altersverteilung des untersuchten Samples (Histogramm)
 gg <-
   cases.infect.codes %>% dplyr::filter(Alter < 100) %>% group_by(PaxStatus) %>% ggplot()
