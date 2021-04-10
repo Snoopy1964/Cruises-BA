@@ -671,7 +671,8 @@ x.A09.NA %>%
   coord_flip()
 # ggplot(aes(x=Region, y=Chi2)) + geom_bar(stat="identity") + coord_flip()
 
-rtffile <- RTF(file = str_c(fileDir, "\\chi2-odds-ratio.doc"))
+docFileDir <- "./Results/WordDocs-doNotChange/"
+rtffile <- RTF(file = str_c(docFileDir, "\\chi2-odds-ratio.doc"))
 
 # Tabelle mit Chi2
 addParagraph(rtffile, "\n\n\nErgebnis Chi2 Test\n")
@@ -703,7 +704,7 @@ x.A09 %>%
   coord_flip()
 # ggplot(aes(x=Region, y=Chi2)) + geom_bar(stat="identity") + coord_flip()
 
-rtffile <- RTF(file = str_c(fileDir, "\\chi2-odds-ratio.doc"))
+rtffile <- RTF(file = str_c(docFileDir, "\\chi2-odds-ratio.doc"))
 
 # Tabelle mit Chi2
 addParagraph(rtffile, "\n\n\nErgebnis Chi2 Test\n")

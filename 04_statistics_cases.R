@@ -6,8 +6,7 @@
 #
 #
 
-fileDir <-
-  "./Results/WordDocs-doNotChange/"
+fileDir <- "./Results/WordDocs-doNotChange/"
 
 #----------------------------------------------------------------
 # (1) writing output of tables into Word File using package rtf
