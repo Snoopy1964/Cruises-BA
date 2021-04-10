@@ -31,10 +31,4 @@ if(!exists("Regions"))         load("data/Maps/Regions.Rdata")
 nrDays        <- function(x) {return(length(unique(x)))}
 nrDays.Region <- function(x) {return(length(x))}
 
-# Zusammenhang cumulated Incidence CI im Zeitraum Delta (in Tagen) und 
-# Incidencerate ID (berechnet in Tagen)
-# Kreienbrock et. al, S.28
-CI1000 <- function(ID,Delta) {
-  return((1 - exp(-ID*Delta)) * 1000)
-}
 #------------------------------------
