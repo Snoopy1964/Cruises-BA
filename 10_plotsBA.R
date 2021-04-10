@@ -297,7 +297,7 @@ ggsave(
   file.name.tmp,
   device = "png",
   width  = 210,
-  height = 160,
+  height = 120,
   units  = "mm"
 )
 print(file.name.tmp)

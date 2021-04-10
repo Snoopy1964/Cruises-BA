@@ -26,7 +26,7 @@ x.A09.NA <- ds.region                                        %>%
   select(Region, Nr.Cases, Nr.not.Cases)
 
 x.A09.cs2 <- as.data.frame((x.A09.NA[,2:3]))
-dimnames(x.A09.cs2) <- list(pull(x.A09[,1]), c("A09", "!A09"))
+dimnames(x.A09.cs2) <- list(pull(x.A09.NA[,1]), c("A09", "!A09"))
 cs2 <- chisq.test(x.A09.cs2[])
 print(cs2)
 x.A09.NA <- x.A09.NA %>% 
@@ -93,6 +93,7 @@ for (i in 1:nr.regions) {
     print(ft)
   } else {
     ft <- rbind(ft, tidy(fisher.test(df, alternative = "two.sided", conf.level = 0.95)))
+    print(ft)
   }
 }
 

@@ -1,2 +1,0 @@
-# Bachelor
-Bachelor Thesis Aileen
